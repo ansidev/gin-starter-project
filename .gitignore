@@ -13,3 +13,16 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Executable directories
+bin/
+dist/
+
+# Intellij IDEA directory
+.idea/
+
+# VS Code directory
+.vscode/
+
+# Env files
+app.env
