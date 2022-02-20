@@ -1,0 +1,13 @@
+ARG APP_NAME
+
+FROM busybox as production
+
+LABEL maintainer="ansidev@ansidev.xyz"
+
+ONBUILD COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+ONBUILD COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ONBUILD COPY --from=builder /etc/passwd /etc/passwd
+ONBUILD COPY --from=builder /etc/group /etc/group
+ONBUILD COPY --from=builder /app/dist/${APP_NAME} /app/${APP_NAME}
+ONBUILD COPY --from=builder /app/app.env.example /app/app.env.example
+ONBUILD USER ansidev
