@@ -7,7 +7,7 @@ import (
 
 func WarnfIf(err error, format string, args ...interface{}) {
 	if err != nil {
-		l.Warn(fmt.Sprintf(format, args), zap.Error(err))
+		l.Warn(fmt.Sprintf(format, args...), zap.Error(err))
 	}
 }
 
