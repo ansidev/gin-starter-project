@@ -8,6 +8,8 @@ prepare:
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 	@echo "Installing wire"
 	go install github.com/google/wire/cmd/wire@latest
+	@echo "Installing mockgen"
+	go install github.com/golang/mock/mockgen@v1.6.0
 	@echo "Copy app.env.example to app.env if app.env does not exists"
 	test -f app.env || cp -a app.env.example app.env
 	@echo "Install Husky"
@@ -66,8 +68,15 @@ sqlc:
 test:
 	go test -v -cover ./...
 
-mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/techschool/simplebank/db/sqlc Store
+# Usage: make domain=${domain} mock_repo
+mock_repo:
+	$(info Generating mock repository for $(domain))
+	mockgen -package mock -source=./domain/$(domain)/$(domain)_repository.go -destination=./$(domain)/mock/mock_$(domain)_repository.go
+
+# Usage: make domain=${domain} mock_service
+mock_service:
+	$(info Generating mock service for $(domain))
+	mockgen -package mock -source=./$(domain)/service/$(domain)_service.go -destination=./$(domain)/mock/mock_$(domain)_service.go
 
 build: di
 	go build -o dist/app app.go wire_gen.go
